@@ -1,0 +1,12 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Instance
+metadata:
+  name: dalhousie-goldberg-web-instance
+spec:
+  forProvider:
+    region: us-east-1
+    ami: ami-0427090fd1714168b
+    instanceType: t2.medium
+    keyName: pocketbase-ec2
+  providerConfigRef:
+    name: default

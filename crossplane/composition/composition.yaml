@@ -1,0 +1,53 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xvm
+  labels:
+    crossplane.io/xrd: xvm.dal.cal
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: xvm.dal.ca/v1alpha1
+    kind: DalVM
+  mode: Pipeline
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: ec2
+            base:
+              apiVersion: ec2.aws.upbound.io/v1beta1
+              kind: Instance
+              metadata:
+                name: dalhousie-goldberg-web-instance
+              spec:
+                forProvider:
+                  region: us-east-1
+                  ami: ami-0427090fd1714168b
+                  instanceType: t2.medium
+                  keyName: pocketbase-ec2
+                providerConfigRef:
+                  name: default
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.size
+                toFieldPath: spec.forProvider.instanceType
+                transforms:
+                  - type: map
+                    map:
+                      web-app: t2.medium
+                      ml-app: t2.large
+                      internal-app: t2.micro
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.os
+                toFieldPath: spec.forProvider.ami
+                transforms:
+                  - type: map
+                    map:
+                      linux: ami-0427090fd1714168b
+                      mac: ami-0c82be92b15ae585f
+                      windows: ami-0888db1202897905c
