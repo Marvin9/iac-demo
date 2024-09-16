@@ -2,12 +2,9 @@ apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
   name: xvm
-  labels:
-    crossplane.io/xrd: xvm.dal.cal
 spec:
-  writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: xvm.dal.ca/v1alpha1
+    apiVersion: dal.ca/v1alpha1
     kind: DalVM
   mode: Pipeline
   pipeline:
@@ -29,10 +26,12 @@ spec:
                   region: us-east-1
                   ami: ami-0427090fd1714168b
                   instanceType: t2.medium
-                  keyName: pocketbase-ec2
-                providerConfigRef:
-                  name: default
+                  tags:
+                    Name: dalvm
             patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: spec.forProvider.tags.Name
               - type: FromCompositeFieldPath
                 fromFieldPath: spec.size
                 toFieldPath: spec.forProvider.instanceType

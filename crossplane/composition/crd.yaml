@@ -1,12 +1,12 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: dalvms.xvm.dal.ca
+  name: vm.dal.ca
 spec:
-  group: xvm.dal.ca
+  group: dal.ca
   names:
     kind: DalVM
-    plural: dalvms
+    plural: vm
   versions:
     - name: v1alpha1
       served: true
@@ -33,6 +33,3 @@ spec:
               required:
                 - size
                 - os
-  claimNames:
-    kind: VMClaim
-    plural: vmclaims

@@ -1,4 +1,4 @@
-apiVersion: xvm.dal.ca/v1alpha1
+apiVersion: dal.ca/v1alpha1
 kind: DalVM
 metadata:
   name: my-dal-vm
@@ -6,7 +6,7 @@ spec:
   size: web-app
   os: linux
 ---
-apiVersion: xvm.dal.ca/v1alpha1
+apiVersion: dal.ca/v1alpha1
 kind: DalVM
 metadata:
   name: my-dal-vm-2
